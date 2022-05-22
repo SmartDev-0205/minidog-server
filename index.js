@@ -9,6 +9,7 @@ app.use(function (re, res, next) {
     res.header("Access-Control-Allow-Headers", "*")
     next()
 })
+
 app.use(express.json());
 app.get('/', function (request, res) {
     res.send("Hello world!");
