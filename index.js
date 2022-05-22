@@ -15,6 +15,7 @@ app.use(express.json());
 app.get('/', function (request, res) {
     res.send("Hello world!");
 });
+
 app.get('/connect', (req, res) => {
 });
 app.get('/balance.php', (req, res) => {
