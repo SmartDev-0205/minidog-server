@@ -10,9 +10,9 @@ app.use(function (re, res, next) {
     next()
 })
 app.use(express.json());
-app.get('/', function(request, res){
+app.get('/', function (request, res) {
     res.send("Hello world!");
- });
+});
 app.get('/connect', (req, res) => {
 });
 app.get('/balance.php', (req, res) => {
@@ -20,13 +20,13 @@ app.get('/balance.php', (req, res) => {
     request(
         { url: 'https://minidog.io/' + originUrl },
         (error, response, body) => {
-          if (error || response.statusCode !== 200) {
-            return res.status(500).json({ type: 'error', message: err.message });
-          }
-    
-          res.json(JSON.parse(body));
+            if (error || response.statusCode !== 200) {
+                return res.status(500).json({ type: 'error', message: err.message });
+            }
+
+            res.json(JSON.parse(body));
         }
-      )
+    )
 });
 app.get('/connect.php', (req, res) => {
     var originUrl = req.originalUrl;
@@ -34,16 +34,16 @@ app.get('/connect.php', (req, res) => {
         request(
             { url: 'https://minidog.io/' + originUrl },
             (error, response, body) => {
-              if (error || response.statusCode !== 200) {
-                return res.status(500).json({ type: 'error', message: err.message });
-              }
-        
-              res.send(body);
+                if (error || response.statusCode !== 200) {
+                    return res.status(500).json({ type: 'error', message: err.message });
+                }
+
+                res.send(body);
             }
-          )    
+        )
     } catch (error) {
-        console.log("get error==========",error);
+        console.log("get error==========", error);
     }
-    
+
 });
 app.listen(port);
