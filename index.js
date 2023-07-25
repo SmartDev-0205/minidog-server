@@ -1,50 +1,32 @@
-const https = require('https');
-var express = require('express'),
-    app = express(),
-    port = process.env.PORT || 5000;
+const axios = require("axios");
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const multer = require("multer");
+const app = express();
 
-app.use(function (re, res, next) {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "*")
-    next()
-})
-app.use(express.json());
-app.get('/', function(request, res){
-    res.send("Hello world!");
- });
-app.post('/sendmail', (req, res) => {
-    var postData = JSON.stringify(req.body);
-    console.log("This is request data ======================== >",postData);
-    var options = {
-        hostname: 'appapi.anexacargo.com',
-        port: 443,
-        path: '/sendmails',
-        method: 'POST',
-        headers: {
-            Authorization:
-                "Basic QWV4cHJlc3M6ZTcwNmRkOTEtZmFlYS00ZWJiLWI5N2EtMDYwMjQxMDg1ZWVm",
-            'Content-Type': 'application/json',
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "*"
-        }
-    };
+app.use(bodyParser.urlencoded({ extended: true }));
+const corsOptions = {
+  origin: "*",
+};
 
-    var req = https.request(options, (res) => {
-        console.log('statusCode:', res.statusCode);
-        console.log('headers:', res.headers);
+app.use(cors(corsOptions));
 
-        res.on('data', (d) => {
-            process.stdout.write(d);
-        });
-    });
+app.get("/", function (request, res) {
+  res.send("Hello world!");
+});
+app.post("/gpt/message.php", async (req, res) => {
+  const formData = new FormData();
+  console.log(req.body);
+  if (!req.body) return;
+  formData.append("text", req.body.text);
 
-    req.on('error', (e) => {
-        console.error(e);
-    });
+  const url = "https://xai.cx/gpt/message.php";
 
-    req.write(postData);
-    req.end();
+  const xaiRes = await axios.post(url, formData);
+  res.send(xaiRes.data);
 });
 
-app.listen(port);
+app.listen(process.env.PORT || 5000, async () => {
+  console.log("Server is up and running on port numner");
+});
